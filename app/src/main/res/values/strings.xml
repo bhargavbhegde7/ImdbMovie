@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ImdbMovie</string>
+    <string name="Instructions">Type the name of the movie and press Submit</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
