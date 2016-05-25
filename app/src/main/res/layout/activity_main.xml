@@ -24,7 +24,7 @@
         android:id="@+id/button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="printCrap"
+        android:onClick="bringData"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/editText"
@@ -34,7 +34,7 @@
         android:textColor="#585858"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
         android:layout_alignParentLeft="true"
@@ -45,7 +45,7 @@
         android:textSize="25dp"
         android:textStyle="bold"
         android:typeface="serif"
-        android:textColor="#2E2E2E"
+        android:textColor="#ff2e2e2e"
         />
 
     <TextView
@@ -88,5 +88,18 @@
         android:id="@+id/imageView"
         android:layout_marginRight="0dp"
          />
+
+    <ImageButton
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/imageButton"
+        android:layout_alignBottom="@+id/editText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/editText"
+        android:src="@drawable/ico_mic"
+        style="?android:buttonBarButtonStyle"
+        android:onClick="promptSpeechInput"
+        />
 
 </RelativeLayout>
