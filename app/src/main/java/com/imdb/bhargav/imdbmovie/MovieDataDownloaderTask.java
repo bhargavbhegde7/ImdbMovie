@@ -2,9 +2,7 @@ package com.imdb.bhargav.imdbmovie;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,8 +78,6 @@ public class MovieDataDownloaderTask extends AsyncTask<String, Void, String> {
         try {
             URL url = new URL(myurl);
 
-
-
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setReadTimeout(10000 /* milliseconds */);
@@ -94,7 +90,6 @@ public class MovieDataDownloaderTask extends AsyncTask<String, Void, String> {
             conn.connect();//culprit
 
             int response = conn.getResponseCode();
-
 
             is = conn.getInputStream();
 
@@ -112,14 +107,6 @@ public class MovieDataDownloaderTask extends AsyncTask<String, Void, String> {
         }
     }//downloadUrl
 
-    ImageView img;
-    Bitmap bitmap;
-    ProgressDialog pDialog;
-        /*making LoadImage class*/
-
-
-
-
-
+    /*making LoadImage class*/
 
 }/* class made */
