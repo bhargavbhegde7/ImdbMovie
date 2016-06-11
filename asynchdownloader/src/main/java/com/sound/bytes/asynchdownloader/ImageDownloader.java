@@ -1,4 +1,4 @@
-package com.imdb.bhargav.imdbmovie;
+package com.sound.bytes.asynchdownloader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,15 +10,17 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * Created by goodbytes on 5/25/2016.
+ * Created by goodbytes on 6/11/2016.
  */
-public class ImageLoaderTask extends AsyncTask<String, String, Bitmap> {
+public class ImageDownloader extends AsyncTask<String, String, Bitmap> {
 
     Bitmap bitmap;
-    ImageHandler handler;
+    ImageDataHandler handler;
+    Context appCtxt;
 
-    public ImageLoaderTask(ImageHandler handlerFromMainActivity){
+    public ImageDownloader(ImageDataHandler handlerFromMainActivity, Context mainAppCtxt){
         handler = handlerFromMainActivity;
+        appCtxt = mainAppCtxt;
     }
 
     @Override
@@ -35,9 +37,9 @@ public class ImageLoaderTask extends AsyncTask<String, String, Bitmap> {
     }
     protected void onPostExecute(Bitmap image) {
         if(image != null){
-            handler.onImageDownloadComplete(image);
+            handler.onImageDownloadCompleted(image,appCtxt);
         }else{
-            Toast.makeText((Context) handler, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(appCtxt, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
         }
     }
 }//LoadImage class ends

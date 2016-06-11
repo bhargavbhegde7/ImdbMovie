@@ -1,4 +1,4 @@
-package com.imdb.bhargav.imdbmovie;
+package com.sound.bytes.asynchdownloader;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,19 +13,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by goodbytes on 5/25/2016.
+ * Created by goodbytes on 6/11/2016.
  */
-/* making class */
+public class JsonDownloader extends AsyncTask<String, Void, String> {
 
-public class MovieDataDownloaderTask extends AsyncTask<String, Void, String> {
-
-    MovieDataHandler handler;
-    ProgressDialog pdLoading;
+    JsonDataHandler handler;
+    //ProgressDialog pdLoading;
     public String data;
+    Context appCtxt;
 
-    public MovieDataDownloaderTask(MovieDataHandler handlerFromMainActivity){
+    public JsonDownloader(JsonDataHandler handlerFromMainActivity, Context mainAppCtxt){
         handler = handlerFromMainActivity;
-        pdLoading = new ProgressDialog((Context) handler);
+        appCtxt = mainAppCtxt;
+        //pdLoading = new ProgressDialog(appCtxt);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class MovieDataDownloaderTask extends AsyncTask<String, Void, String> {
         super.onPreExecute();
 
         //this method will be running on UI thread
-        pdLoading.setMessage("\tLoading...");
-        pdLoading.show();
+        //pdLoading.setMessage("\tLoading...");
+        //pdLoading.show();
     }
 
     @Override
@@ -53,8 +53,8 @@ public class MovieDataDownloaderTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        pdLoading.dismiss();
-        handler.onDataDownloadComplete(result);
+        //pdLoading.dismiss();
+        handler.onJsonDownloadCompleted(result,appCtxt);
     }
 
     // Reads an InputStream and converts it to a String.

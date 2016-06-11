@@ -1,5 +1,6 @@
 package com.imdb.bhargav.imdbmovie;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.speech.RecognizerIntent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sound.bytes.asynchdownloader.ImageDataHandler;
+import com.sound.bytes.asynchdownloader.ImageDownloader;
+import com.sound.bytes.asynchdownloader.JsonDataHandler;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends ActionBarActivity implements MovieDataHandler, ImageHandler{
+public class MainActivity extends Activity {
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
     private ImageButton btnSpeak;
@@ -97,7 +101,33 @@ public class MainActivity extends ActionBarActivity implements MovieDataHandler,
 
         String url = "http://www.omdbapi.com/?t="+title;
 
-        new MovieDataDownloaderTask(this).execute(url);
+        JsonDataHandler handler  = new JsonDataHandler() {
+
+            @Override
+            public void onJsonDownloadCompleted(Object result, Context mainAppCtxt) {
+                //this method will be running on UI thread
+                TextView ratingDisplay = (TextView)findViewById(R.id.textView3);
+
+                //parse the json
+                String rating = "....";
+                try {
+                    rating = getRating((String) result);
+                    ImageDataHandler handler = new ImageDataHandler() {
+                        @Override
+                        public void onImageDownloadCompleted(Object result, Context mainAppCtxt) {
+                            ImageView poster = (ImageView)findViewById(R.id.imageView);
+                            poster.setImageBitmap((Bitmap) result);
+                        }
+                    };
+                    new ImageDownloader(handler,getApplicationContext()).execute(getPosterUrl((String) result));
+                } catch (JSONException e) {
+                    Toast.makeText(MainActivity.this, "The details do not exist", Toast.LENGTH_SHORT).show();
+                }
+
+                ratingDisplay.setText(rating);
+            }
+        };
+        new com.sound.bytes.asynchdownloader.JsonDownloader(handler,getApplicationContext()).execute(url);
     }
 
     private String getRating(String result) throws JSONException {
@@ -105,23 +135,6 @@ public class MainActivity extends ActionBarActivity implements MovieDataHandler,
         JSONObject reader = new JSONObject(result);
         String rating = reader.getString("imdbRating");
         return rating;
-    }
-
-    @Override
-    public void onDataDownloadComplete(String result) {
-        //this method will be running on UI thread
-        TextView ratingDisplay = (TextView)findViewById(R.id.textView3);
-
-        //parse the json
-        String rating = "....";
-        try {
-            rating = getRating(result);
-            new ImageLoaderTask(this).execute(getPosterUrl(result));
-        } catch (JSONException e) {
-            Toast.makeText(MainActivity.this, "The details do not exist", Toast.LENGTH_SHORT).show();
-        }
-
-        ratingDisplay.setText(rating);
     }
 
     private String getPosterUrl(String result) throws JSONException {
@@ -182,12 +195,6 @@ public class MainActivity extends ActionBarActivity implements MovieDataHandler,
             }
 
         }
-    }
-
-    @Override
-    public void onImageDownloadComplete(Bitmap image) {
-        ImageView poster = (ImageView)findViewById(R.id.imageView);
-        poster.setImageBitmap(image);
     }
 
     /* for speech input */
